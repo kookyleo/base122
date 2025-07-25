@@ -2,16 +2,30 @@
 name = "base122"
 version = "0.1.0"
 edition = "2021"
-description = "High-performance Base122 encoding/decoding library"
+authors = ["Base122 Contributors"]
+description = "High-performance Base122 encoding/decoding library with bitwise operations"
+documentation = "https://docs.rs/base122"
+homepage = "https://github.com/example/base122"
+repository = "https://github.com/example/base122"
 license = "MIT"
+keywords = ["encoding", "base122", "binary-to-text", "compression", "bitwise"]
+categories = ["encoding", "algorithms", "no-std"]
+readme = "README.md"
 
 [lib]
 name = "base122"
 path = "src/lib.rs"
 
-[[bin]]
-name = "base122-demo"
-path = "src/main.rs"
+[[example]]
+name = "demo"
+path = "examples/demo.rs"
 
 [dependencies]
-num-bigint = "0.4"
+# No external dependencies - pure Rust implementation
+
+[dev-dependencies]
+# Only for testing - no runtime dependencies
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

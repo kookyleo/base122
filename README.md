@@ -1,127 +1,216 @@
 # Base122 Encoding Library
 
-一个高性能的 Base122 编码/解码 Rust 库。
+[![Crates.io](https://img.shields.io/crates/v/base122.svg)](https://crates.io/crates/base122)
+[![Documentation](https://docs.rs/base122/badge.svg)](https://docs.rs/base122)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 特性
+A high-performance Base122 encoding/decoding library for Rust, based on the original [kevinAlbs Base122 algorithm](https://github.com/kevinAlbs/Base122).
 
-- **高效编码**: 使用 122 个安全 ASCII 字符进行编码
-- **安全传输**: 排除了 6 个在文本、网页、URI 传输中有风险的字符：`"`, `'`, `\`, `&`, `\n`, `\r`
-- **二进制数据保护**: 正确处理前导零和所有字节值
-- **高性能**: 使用 BigInt 算法实现最优性能
-- **完整测试**: 包含全面的测试用例和性能基准测试
+Base122 is a binary-to-text encoding that is approximately **14% more space-efficient than Base64**, making it ideal for data URIs and other space-constrained applications.
 
-## 安装
+## Features
 
-将以下内容添加到您的 `Cargo.toml`:
+- 🚀 **High Performance**: Bitwise operations for maximum efficiency
+- 📦 **Zero Dependencies**: Pure Rust implementation
+- 🛡️ **Memory Safe**: No unsafe code
+- 🎯 **Space Efficient**: ~87% compression efficiency vs ~75% for Base64
+- 🔧 **Easy to Use**: Simple encode/decode API
+- 📚 **Well Documented**: Comprehensive documentation and examples
+
+## Algorithm Overview
+
+Base122 uses a sophisticated bitwise approach:
+
+1. **7-bit Extraction**: Extracts exactly 7 bits at a time from input data
+2. **Smart Character Mapping**: Safe characters map directly to single bytes
+3. **UTF-8 Encoding**: "Dangerous characters" use multi-byte UTF-8 sequences
+4. **Optimal Efficiency**: Achieves ~87% compression efficiency
+
+### Dangerous Characters
+
+Six characters are considered "dangerous" for transmission and are specially encoded:
+
+- `\0` (null) - can truncate strings
+- `\n` (newline) - breaks single-line formats  
+- `\r` (carriage return) - breaks single-line formats
+- `"` (double quote) - conflicts with JSON/HTML attributes
+- `&` (ampersand) - conflicts with HTML entities
+- `\` (backslash) - conflicts with escape sequences
+
+## Quick Start
+
+Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-base122 = "0.1.0"
+base122 = "0.1"
 ```
 
-## 使用方法
+## Usage
 
-### 基本编码/解码
+### Basic Example
 
 ```rust
 use base122::{encode, decode};
 
-fn main() {
-    let data = b"Hello, World!";
-    
-    // 编码
-    let encoded = encode(data);
-    println!("编码结果: {}", encoded);
-    
-    // 解码
-    let decoded = decode(&encoded).unwrap();
-    assert_eq!(decoded, data);
-    println!("解码成功!");
-}
+// Encode binary data
+let data = b"Hello, World!";
+let encoded = encode(data);
+println!("Encoded: {}", encoded);
+
+// Decode back to original
+let decoded = decode(&encoded).unwrap();
+assert_eq!(data, &decoded[..]);
 ```
 
-### 处理二进制数据
+### Working with Binary Data
 
 ```rust
 use base122::{encode, decode};
 
-fn main() {
-    // 处理任意二进制数据
-    let binary_data: Vec<u8> = (0..256).collect();
-    let encoded = encode(&binary_data);
-    let decoded = decode(&encoded).unwrap();
-    assert_eq!(decoded, binary_data);
-}
+// Binary data with dangerous characters
+let binary_data = vec![0, 10, 13, 34, 38, 92, 65, 66, 67];
+let encoded = encode(&binary_data);
+let decoded = decode(&encoded).unwrap();
+assert_eq!(binary_data, decoded);
 ```
 
-## 命令行工具
+### Command Line Usage
 
-本库还提供了一个命令行演示工具：
+Build and run the demo:
 
 ```bash
-# 编码文本
-cargo run --bin base122-demo encode "Hello, World!"
-
-# 解码文本
-cargo run --bin base122-demo decode "<encoded_string>"
-
-# 运行演示
-cargo run --bin base122-demo demo
+cargo build --example demo
+cargo run --example demo -- encode "Hello, World!"
+cargo run --example demo -- decode "$(cargo run --example demo -- encode 'Hello, World!')"
 ```
 
-## 测试
+## Performance
 
-运行所有测试：
+### Efficiency Comparison
+
+| Encoding | Expansion Ratio | Efficiency | Use Case |
+|----------|----------------|------------|----------|
+| Hexadecimal | 2.00x | 50% | Debug output |
+| Base64 | 1.33x | 75% | Email, HTTP |
+| **Base122** | **1.14x** | **87%** | **Data URIs, Space-constrained** |
+
+### Benchmark Results
+
+```
+Size       Encoded      Ratio    Efficiency    vs Base64
+--------------------------------------------------------
+10         12          1.200     83.3%        +16.7%
+100        115         1.150     87.0%        +13.8%
+1000       1143        1.143     87.5%        +14.3%
+10000      11429       1.143     87.5%        +14.3%
+```
+
+## When to Use Base122
+
+**✅ Ideal for:**
+- Data URIs in HTML/CSS
+- Space-constrained applications
+- Binary data transmission
+- JSON payloads with binary content
+- Text protocols with size limits
+
+**❌ Consider alternatives for:**
+- Systems requiring Base64 compatibility
+- Environments without UTF-8 support
+- Cases where simplicity trumps efficiency
+
+## Examples
+
+### Data URI Optimization
+
+```rust
+use base122::encode;
+
+// Image data for CSS/HTML
+let image_data = std::fs::read("image.png").unwrap();
+let base122_uri = format!("data:image/png;base122,{}", encode(&image_data));
+
+// ~14% smaller than equivalent Base64 data URI
+```
+
+### Binary Protocol
+
+```rust
+use base122::{encode, decode};
+
+// Encode binary protocol message
+let message = vec![0x01, 0x02, 0x03, 0x04];
+let encoded = encode(&message);
+
+// Send over text-based protocol
+send_message(&encoded);
+
+// Decode on receiver
+let received = receive_message();
+let decoded = decode(&received).unwrap();
+```
+
+## Error Handling
+
+The `decode` function returns a `Result<Vec<u8>, String>`:
+
+```rust
+use base122::decode;
+
+match decode("invalid input") {
+    Ok(data) => println!("Decoded: {:?}", data),
+    Err(e) => eprintln!("Decode error: {}", e),
+}
+```
+
+## Testing
+
+Run all tests:
 
 ```bash
 cargo test
 ```
 
-运行性能测试（带输出）：
+Run with output for detailed benchmarks:
 
 ```bash
 cargo test -- --nocapture
 ```
 
-## 算法说明
+Run the example:
 
-Base122 使用 122 个可打印的 ASCII 字符进行编码：
+```bash
+cargo run --example demo benchmark
+```
 
-- 数字：0-9 (10个字符)
-- 大写字母：A-Z (26个字符)  
-- 小写字母：a-z (26个字符)
-- 安全标点符号：60个字符（排除危险字符后）
+## Documentation
 
-编码过程：
-1. 在输入数据前添加标记字节以保护前导零
-2. 将字节数据转换为大整数（base 256）
-3. 将大整数转换为 base 122 表示
-4. 使用字符集映射每个数字到对应字符
+- [API Documentation](https://docs.rs/base122)
+- [Algorithm Details](https://github.com/kevinAlbs/Base122)
+- Run `cargo doc --open` for local documentation
 
-解码过程是编码的逆过程。
+## Contributing
 
-## 性能
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-在现代硬件上，该库能够：
-- 处理大容量数据（测试了 1KB+ 数据）
-- 保持合理的编码开销比率
-- 提供快速的编码/解码操作
+## License
 
-## 安全性
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-本库排除了以下 6 个"危险字符"以确保在各种环境中安全传输：
+## Acknowledgments
 
-- `"` (双引号, 0x22)
-- `'` (单引号, 0x27) 
-- `\` (反斜杠, 0x5C)
-- `&` (和号, 0x26)
-- `\n` (换行符, 0x0A)
-- `\r` (回车符, 0x0D)
+- Based on the original [Base122 algorithm](https://github.com/kevinAlbs/Base122) by Kevin Albertson
+- Inspired by the need for more efficient binary-to-text encoding
+- Thanks to the Rust community for excellent tooling and libraries
 
-## 许可证
+## Languages
 
-MIT 许可证
+- [English](README.md)
+- [中文](README.zh.md)
 
-## 贡献
+## See Also
 
-欢迎提交 issue 和 pull request！
+- [Base64](https://docs.rs/base64) - Standard Base64 encoding
+- [Hex](https://docs.rs/hex) - Hexadecimal encoding
+- [Original Base122 JavaScript implementation](https://github.com/kevinAlbs/Base122)
