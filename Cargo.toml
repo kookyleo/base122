@@ -1,0 +1,17 @@
+[package]
+name = "base122"
+version = "0.1.0"
+edition = "2021"
+description = "High-performance Base122 encoding/decoding library"
+license = "MIT"
+
+[lib]
+name = "base122"
+path = "src/lib.rs"
+
+[[bin]]
+name = "base122-demo"
+path = "src/main.rs"
+
+[dependencies]
+num-bigint = "0.4"
