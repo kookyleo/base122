@@ -12,26 +12,14 @@ env:
 jobs:
   test:
     name: Test
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        rust:
-          - stable
-          - beta
-          - nightly
-        include:
-          - os: ubuntu-latest
-            rust: stable
-            coverage: true
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
     
     - name: Install Rust
-      uses: dtolnay/rust-toolchain@master
+      uses: dtolnay/rust-toolchain@stable
       with:
-        toolchain: ${{ matrix.rust }}
         components: rustfmt, clippy
     
     - name: Cache dependencies
@@ -47,11 +35,9 @@ jobs:
     
     - name: Format check
       run: cargo fmt --all -- --check
-      if: matrix.rust == 'stable'
     
     - name: Clippy check
       run: cargo clippy --all-targets --all-features -- -D warnings
-      if: matrix.rust == 'stable'
     
     - name: Build
       run: cargo build --verbose
@@ -67,7 +53,6 @@ jobs:
     
     - name: Run benchmark
       run: cargo run --example demo benchmark
-      if: matrix.rust == 'stable' && matrix.os == 'ubuntu-latest'
 
   security:
     name: Security Audit

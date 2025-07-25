@@ -29,13 +29,20 @@ echo ""
 
 # 快速检查
 print_info "运行快速检查..."
+
+# 修复格式
+print_info "修复代码格式..."
+cargo fmt --all
+
+# 运行测试
 if ! cargo test --lib --quiet; then
     print_error "测试失败"
     exit 1
 fi
 
-if ! cargo clippy --lib --quiet -- -D warnings > /dev/null 2>&1; then
-    print_error "Clippy检查失败"
+# Clippy检查
+if ! cargo clippy --lib -- -D warnings; then
+    print_error "Clippy检查失败，请修复以上问题"
     exit 1
 fi
 
