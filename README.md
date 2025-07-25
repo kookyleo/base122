@@ -1,7 +1,7 @@
 # Base122 Encoding Library
 
-[![Crates.io](https://img.shields.io/crates/v/base122.svg)](https://crates.io/crates/base122)
-[![Documentation](https://docs.rs/base122/badge.svg)](https://docs.rs/base122)
+[![Crates.io](https://img.shields.io/crates/v/base122-rs.svg)](https://crates.io/crates/base122-rs)
+[![Documentation](https://docs.rs/base122-rs/badge.svg)](https://docs.rs/base122-rs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A high-performance Base122 encoding/decoding library for Rust, based on the original [kevinAlbs Base122 algorithm](https://github.com/kevinAlbs/Base122).
@@ -51,7 +51,7 @@ base122-rs = "0.1"
 ### Basic Example
 
 ```rust
-use base122::{encode, decode};
+use base122_rs::{encode, decode};
 
 // Encode binary data
 let data = b"Hello, World!";
@@ -66,7 +66,7 @@ assert_eq!(data, &decoded[..]);
 ### Working with Binary Data
 
 ```rust
-use base122::{encode, decode};
+use base122_rs::{encode, decode};
 
 // Binary data with dangerous characters
 let binary_data = vec![0, 10, 13, 34, 38, 92, 65, 66, 67];
@@ -125,7 +125,7 @@ Size       Encoded      Ratio    Efficiency    vs Base64
 ### Data URI Optimization
 
 ```rust
-use base122::encode;
+use base122_rs::encode;
 
 // Image data for CSS/HTML
 let image_data = std::fs::read("image.png").unwrap();
@@ -137,7 +137,7 @@ let base122_uri = format!("data:image/png;base122,{}", encode(&image_data));
 ### Binary Protocol
 
 ```rust
-use base122::{encode, decode};
+use base122_rs::{encode, decode};
 
 // Encode binary protocol message
 let message = vec![0x01, 0x02, 0x03, 0x04];
@@ -156,7 +156,7 @@ let decoded = decode(&received).unwrap();
 The `decode` function returns a `Result<Vec<u8>, String>`:
 
 ```rust
-use base122::decode;
+use base122_rs::decode;
 
 match decode("invalid input") {
     Ok(data) => println!("Decoded: {:?}", data),
@@ -186,7 +186,7 @@ cargo run --example demo benchmark
 
 ## Documentation
 
-- [API Documentation](https://docs.rs/base122)
+- [API Documentation](https://docs.rs/base122-rs)
 - [Algorithm Details](https://github.com/kevinAlbs/Base122)
 - Run `cargo doc --open` for local documentation
 

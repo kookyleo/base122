@@ -1,7 +1,7 @@
 # Base122 编码库
 
-[![Crates.io](https://img.shields.io/crates/v/base122.svg)](https://crates.io/crates/base122)
-[![文档](https://docs.rs/base122/badge.svg)](https://docs.rs/base122)
+[![Crates.io](https://img.shields.io/crates/v/base122-rs.svg)](https://crates.io/crates/base122-rs)
+[![文档](https://docs.rs/base122-rs/badge.svg)](https://docs.rs/base122-rs)
 [![许可证: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 一个高性能的 Base122 编码/解码 Rust 库，基于 [kevinAlbs 的原始 Base122 算法](https://github.com/kevinAlbs/Base122)。
@@ -51,7 +51,7 @@ base122-rs = "0.1"
 ### 基本示例
 
 ```rust
-use base122::{encode, decode};
+use base122_rs::{encode, decode};
 
 // 编码二进制数据
 let data = b"Hello, World!";
@@ -66,7 +66,7 @@ assert_eq!(data, &decoded[..]);
 ### 处理二进制数据
 
 ```rust
-use base122::{encode, decode};
+use base122_rs::{encode, decode};
 
 // 包含危险字符的二进制数据
 let binary_data = vec![0, 10, 13, 34, 38, 92, 65, 66, 67];
@@ -125,7 +125,7 @@ cargo run --example demo -- decode "$(cargo run --example demo -- encode 'Hello,
 ### 数据 URI 优化
 
 ```rust
-use base122::encode;
+use base122_rs::encode;
 
 // 图片数据用于 CSS/HTML
 let image_data = std::fs::read("image.png").unwrap();
@@ -137,7 +137,7 @@ let base122_uri = format!("data:image/png;base122,{}", encode(&image_data));
 ### 二进制协议
 
 ```rust
-use base122::{encode, decode};
+use base122_rs::{encode, decode};
 
 // 编码二进制协议消息
 let message = vec![0x01, 0x02, 0x03, 0x04];
@@ -156,7 +156,7 @@ let decoded = decode(&received).unwrap();
 `decode` 函数返回 `Result<Vec<u8>, String>`：
 
 ```rust
-use base122::decode;
+use base122_rs::decode;
 
 match decode("无效输入") {
     Ok(data) => println!("解码成功: {:?}", data),
@@ -244,7 +244,7 @@ Base122 通过精确的位操作实现高效率：
 
 ## 文档
 
-- [API 文档](https://docs.rs/base122)
+- [API 文档](https://docs.rs/base122-rs)
 - [算法详情](https://github.com/kevinAlbs/Base122)
 - 运行 `cargo doc --open` 查看本地文档
 
