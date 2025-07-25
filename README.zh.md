@@ -43,7 +43,7 @@ Base122 使用精密的位级操作方法：
 
 ```toml
 [dependencies]
-base122 = "0.1"
+base122-rs = "0.1"
 ```
 
 ## 使用方法
@@ -247,6 +247,41 @@ Base122 通过精确的位操作实现高效率：
 - [API 文档](https://docs.rs/base122)
 - [算法详情](https://github.com/kevinAlbs/Base122)
 - 运行 `cargo doc --open` 查看本地文档
+
+## 开发指南
+
+### 版本发布管理
+
+本项目包含自动化发布脚本，便于版本管理：
+
+**📋 完整发布流程：**
+```bash
+./release.sh
+```
+- 交互式引导发布，包含全面检查
+- 运行完整测试套件、格式检查和文档构建
+- 更新版本号、创建提交和标签
+- 触发自动发布到 crates.io
+
+**⚡ 快速补丁发布：**
+```bash
+./quick-release.sh
+```
+- 自动递增补丁版本号 (0.1.0 → 0.1.1)
+- 仅运行基础检查
+- 适用于快速修复bug
+
+**🤖 自动化发布：**
+- 推送版本标签时，GitHub Actions 自动发布到 crates.io
+- 创建包含详细更新日志的 GitHub Release
+- 在多平台和多个 Rust 版本上运行完整 CI
+
+### 手动发布步骤
+1. 更新 `Cargo.toml` 中的版本号
+2. 提交更改：`git commit -m "chore: bump version to x.y.z"`
+3. 创建标签：`git tag vx.y.z`
+4. 推送标签：`git push origin vx.y.z`
+5. GitHub Actions 处理剩余工作！
 
 ## 贡献
 

@@ -43,7 +43,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-base122 = "0.1"
+base122-rs = "0.1"
 ```
 
 ## Usage
@@ -189,6 +189,41 @@ cargo run --example demo benchmark
 - [API Documentation](https://docs.rs/base122)
 - [Algorithm Details](https://github.com/kevinAlbs/Base122)
 - Run `cargo doc --open` for local documentation
+
+## Development
+
+### Release Management
+
+This project includes automated release scripts for easy version management:
+
+**📋 Full Release Process:**
+```bash
+./release.sh
+```
+- Interactive guided release with comprehensive checks
+- Runs full test suite, format checks, and documentation build
+- Updates version, creates commits and tags
+- Triggers automated publishing to crates.io
+
+**⚡ Quick Patch Release:**
+```bash
+./quick-release.sh
+```
+- Auto-increments patch version (0.1.0 → 0.1.1)
+- Runs basic checks only
+- Fast release for bug fixes
+
+**🤖 Automated Publishing:**
+- GitHub Actions automatically publishes to crates.io when version tags are pushed
+- Creates GitHub releases with detailed changelogs
+- Runs comprehensive CI across multiple platforms and Rust versions
+
+### Manual Release Steps
+1. Update version in `Cargo.toml`
+2. Commit changes: `git commit -m "chore: bump version to x.y.z"`
+3. Create tag: `git tag vx.y.z`
+4. Push tag: `git push origin vx.y.z`
+5. GitHub Actions handles the rest!
 
 ## Contributing
 
