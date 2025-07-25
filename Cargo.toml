@@ -1,19 +1,19 @@
 [package]
-name = "base122"
+name = "base122-rs"
 version = "0.1.0"
 edition = "2021"
 authors = ["Base122 Contributors"]
 description = "High-performance Base122 encoding/decoding library with bitwise operations"
 documentation = "https://docs.rs/base122"
-homepage = "https://github.com/example/base122"
-repository = "https://github.com/example/base122"
+homepage = "https://github.com/kookyleo/base122"
+repository = "https://github.com/kookyleo/base122"
 license = "MIT"
 keywords = ["encoding", "base122", "binary-to-text", "compression", "bitwise"]
 categories = ["encoding", "algorithms", "no-std"]
 readme = "README.md"
 
 [lib]
-name = "base122"
+name = "base122_rs"
 path = "src/lib.rs"
 
 [[example]]
