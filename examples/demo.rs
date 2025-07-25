@@ -3,7 +3,7 @@
 //! This example demonstrates the usage of the Base122 encoding library,
 //! showing encoding/decoding operations and efficiency comparisons.
 
-use base122::{encode, decode};
+use base122_rs::{encode, decode};
 use std::env;
 use std::io::{self, Read, Write};
 

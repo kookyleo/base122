@@ -34,7 +34,7 @@
 //! ## Examples
 //!
 //! ```rust
-//! use base122::{encode, decode};
+//! use base122_rs::{encode, decode};
 //!
 //! // Basic encoding/decoding
 //! let data = b"Hello, World!";
@@ -104,7 +104,7 @@ const SHORTENED: u8 = 0b111;
 /// # Examples
 ///
 /// ```rust
-/// use base122::encode;
+/// use base122_rs::encode;
 ///
 /// // Simple text
 /// let encoded = encode(b"Hello");
@@ -235,7 +235,7 @@ pub fn encode(data: &[u8]) -> String {
 /// # Examples
 ///
 /// ```rust
-/// use base122::{encode, decode};
+/// use base122_rs::{encode, decode};
 ///
 /// let original = b"Test data with\0dangerous\ncharacters";
 /// let encoded = encode(original);
