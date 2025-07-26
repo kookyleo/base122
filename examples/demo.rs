@@ -33,7 +33,7 @@ fn main() {
                         io::stdout().write_all(&data).unwrap();
                     }
                     Err(e) => {
-                        eprintln!("Decode error: {}", e);
+                        eprintln!("Decode error: {e}");
                         std::process::exit(1);
                     }
                 }
@@ -46,7 +46,7 @@ fn main() {
                         io::stdout().write_all(&data).unwrap();
                     }
                     Err(e) => {
-                        eprintln!("Decode error: {}", e);
+                        eprintln!("Decode error: {e}");
                         std::process::exit(1);
                     }
                 }
@@ -91,16 +91,16 @@ fn run_demo() {
     ];
 
     for (input, description) in test_cases {
-        println!("Test: {}", description);
-        println!("  Input: {:?}", input);
+        println!("Test: {description}");
+        println!("  Input: {input:?}");
 
         let encoded = encode(input.as_bytes());
-        println!("  Encoded: {:?}", encoded);
+        println!("  Encoded: {encoded:?}");
 
         match decode(&encoded) {
             Ok(decoded) => {
                 let decoded_str = String::from_utf8_lossy(&decoded);
-                println!("  Decoded: {:?}", decoded_str);
+                println!("  Decoded: {decoded_str:?}");
 
                 if decoded_str == input {
                     println!("  ✅ Round-trip successful");
@@ -109,7 +109,7 @@ fn run_demo() {
                 }
             }
             Err(e) => {
-                println!("  ❌ Decode failed: {}", e);
+                println!("  ❌ Decode failed: {e}");
             }
         }
 
@@ -124,11 +124,8 @@ fn run_demo() {
 
         println!("  📊 Size comparison:");
         println!("     Original: {} bytes", input.len());
-        println!("     Base64:   {} bytes (theoretical)", base64_size);
-        println!(
-            "     Base122:  {} bytes ({:.1}% savings)",
-            base122_size, savings
-        );
+        println!("     Base64:   {base64_size} bytes (theoretical)");
+        println!("     Base122:  {base122_size} bytes ({savings:.1}% savings)");
         println!();
     }
 
@@ -149,12 +146,12 @@ fn run_demo() {
             }
         }
         Err(e) => {
-            println!("❌ Binary decode failed: {}", e);
+            println!("❌ Binary decode failed: {e}");
         }
     }
 
     let expansion_ratio = encoded.len() as f64 / binary_data.len() as f64;
-    println!("📊 Binary expansion ratio: {:.3}x", expansion_ratio);
+    println!("📊 Binary expansion ratio: {expansion_ratio:.3}x");
 }
 
 fn run_benchmark() {
@@ -186,8 +183,7 @@ fn run_benchmark() {
 
         // Base64 comparison
         let base64_size = (size * 4 + 2) / 3;
-        let vs_base64 =
-            (base64_size as f64 - encoded.len() as f64) / base64_size as f64 * 100.0;
+        let vs_base64 = (base64_size as f64 - encoded.len() as f64) / base64_size as f64 * 100.0;
 
         println!(
             "{:>10} {:>12} {:>12.3} {:>9.1}% {:>11.1}%",
@@ -200,10 +196,7 @@ fn run_benchmark() {
 
         if size <= 1000 {
             // Only show timing for smaller sizes
-            println!(
-                "           Encode: {:?}, Decode: {:?}",
-                encode_time, decode_time
-            );
+            println!("           Encode: {encode_time:?}, Decode: {decode_time:?}");
         }
     }
 

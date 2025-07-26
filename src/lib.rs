@@ -322,8 +322,7 @@ mod tests {
             let decoded = decode(&encoded).unwrap();
             assert_eq!(
                 decoded, data,
-                "Failed for dangerous character: {}",
-                dangerous_char
+                "Failed for dangerous character: {dangerous_char}"
             );
         }
     }
@@ -358,7 +357,7 @@ mod tests {
         for data in test_cases {
             let encoded = encode(&data);
             let decoded = decode(&encoded).unwrap();
-            assert_eq!(decoded, data, "Round-trip failed for: {:?}", data);
+            assert_eq!(decoded, data, "Round-trip failed for: {data:?}");
         }
     }
 

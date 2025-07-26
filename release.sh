@@ -115,9 +115,12 @@ run_pre_release_checks() {
     fi
     print_success "所有测试通过"
     
-    echo "🔍 检查并修复代码格式..."
-    cargo fmt --all
-    print_success "代码格式已修复"
+    echo "🔍 检查代码格式..."
+    if ! cargo fmt --all --check; then
+        print_error "代码格式不正确，运行 'cargo fmt --all' 修复后重试"
+        exit 1
+    fi
+    print_success "代码格式检查通过"
     
     echo "🔧 运行Clippy检查..."
     if ! cargo clippy --all-targets --all-features -- -D warnings; then

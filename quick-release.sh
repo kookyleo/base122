@@ -30,9 +30,12 @@ echo ""
 # 快速检查
 print_info "运行快速检查..."
 
-# 修复格式
-print_info "修复代码格式..."
-cargo fmt --all
+# 检查代码格式
+print_info "检查代码格式..."
+if ! cargo fmt --all --check; then
+    print_error "代码格式不正确，请运行 'cargo fmt --all' 修复后重试"
+    exit 1
+fi
 
 # 运行测试
 if ! cargo test --lib --quiet; then
@@ -40,8 +43,8 @@ if ! cargo test --lib --quiet; then
     exit 1
 fi
 
-# Clippy检查
-if ! cargo clippy --lib -- -D warnings; then
+# 严格Clippy检查
+if ! cargo clippy --all-targets --all-features -- -D warnings; then
     print_error "Clippy检查失败，请修复以上问题"
     exit 1
 fi
