@@ -171,7 +171,18 @@ pub fn encode(data: &[u8]) -> String {
             let mut b1 = 0b11000010; // First byte prefix
             let mut b2 = 0b10000000; // Second byte prefix
 
-            if next_bits.is_none() {
+            if let Some(next_bits_value) = next_bits {
+                b1 |= ((illegal_index as u8) & 0b111) << 2;
+
+                // Encode the next 7 bits across the UTF-8 sequence
+                let first_bit = if (next_bits_value & 0b01000000) > 0 {
+                    1
+                } else {
+                    0
+                };
+                b1 |= first_bit;
+                b2 |= next_bits_value & 0b00111111;
+            } else {
                 // Last 7 bits are dangerous - use shortened marker
                 b1 |= (SHORTENED & 0b111) << 2;
                 let final_bits = bits;
@@ -180,14 +191,6 @@ pub fn encode(data: &[u8]) -> String {
                 let first_bit = if (final_bits & 0b01000000) > 0 { 1 } else { 0 };
                 b1 |= first_bit;
                 b2 |= final_bits & 0b00111111;
-            } else {
-                let next_bits = next_bits.unwrap();
-                b1 |= ((illegal_index as u8) & 0b111) << 2;
-
-                // Encode the next 7 bits across the UTF-8 sequence
-                let first_bit = if (next_bits & 0b01000000) > 0 { 1 } else { 0 };
-                b1 |= first_bit;
-                b2 |= next_bits & 0b00111111;
             }
 
             result.push(b1);
